@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
+import { useContext } from 'react'
 import Button from '@/components/atoms/Button'
 import Badge from '@/components/atoms/Badge'
 import ApperIcon from '@/components/ApperIcon'
 import { useCart } from '@/hooks/useCart'
+import { AuthContext } from '@/App'
 
 const Header = () => {
   const { items } = useCart()
+  const { logout } = useContext(AuthContext)
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
 
   const navigationItems = [
@@ -57,10 +60,23 @@ const Header = () => {
                 )}
               </NavLink>
             ))}
-          </nav>
+</nav>
 
-          {/* Mobile Cart Icon */}
-          <div className="md:hidden">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="LogOut"
+              onClick={logout}
+              className="text-coffee hover:text-orange"
+            >
+              Logout
+            </Button>
+          </div>
+
+          {/* Mobile Actions */}
+          <div className="md:hidden flex items-center gap-2">
             <NavLink to="/cart" className="relative">
               <Button variant="ghost" size="sm" icon="ShoppingCart" />
               {totalItems > 0 && (
@@ -73,6 +89,13 @@ const Header = () => {
                 </Badge>
               )}
             </NavLink>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="LogOut"
+              onClick={logout}
+              className="text-coffee hover:text-orange"
+            />
           </div>
         </div>
       </div>

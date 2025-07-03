@@ -30,11 +30,9 @@ const OrdersDashboard = () => {
     try {
       setLoading(true)
       setError('')
-      const data = await orderService.getAll()
-      // Sort by most recent first
-      const sortedOrders = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      setOrders(sortedOrders)
-    } catch (err) {
+const data = await orderService.getAll()
+      // Data is already sorted by created_at DESC from the service
+      setOrders(data)
       setError('Failed to load orders. Please try again.')
       console.error('Error loading orders:', err)
     } finally {
@@ -45,7 +43,7 @@ const OrdersDashboard = () => {
   const handleCancelOrder = async (orderId) => {
     try {
       const updatedOrder = await orderService.update(orderId, { status: 'cancelled' })
-      setOrders(prevOrders =>
+setOrders(prevOrders =>
         prevOrders.map(order =>
           order.Id === orderId ? { ...order, status: 'cancelled' } : order
         )
@@ -57,9 +55,9 @@ const OrdersDashboard = () => {
     }
   }
 
-  const handleViewDetails = (order) => {
+const handleViewDetails = (order) => {
     // In a real app, this would open a detailed view
-    toast.info(`Viewing details for Order #${order.orderNumber}`)
+    toast.info(`Viewing details for Order #${order.order_number}`)
   }
 
   const filteredOrders = filter === 'all' 

@@ -5,7 +5,7 @@ import Button from '@/components/atoms/Button'
 import { formatDistanceToNow } from 'date-fns'
 
 const OrderCard = ({ order, onViewDetails, onCancelOrder }) => {
-  const { orderNumber, customerName, items, total, status, pickupTime, createdAt } = order
+const { order_number, customer_name, items, total, status, pickup_time, created_at } = order
 
   const getStatusVariant = (status) => {
     switch (status) {
@@ -33,8 +33,8 @@ const OrderCard = ({ order, onViewDetails, onCancelOrder }) => {
     <Card variant="elevated" className="relative">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="font-display text-xl text-coffee">Order #{orderNumber}</h3>
-          <p className="text-gray-600">{customerName}</p>
+<h3 className="font-display text-xl text-coffee">Order #{order_number}</h3>
+          <p className="text-gray-600">{customer_name}</p>
         </div>
         <Badge variant={getStatusVariant(status)} className="capitalize">
           {status}
@@ -55,14 +55,14 @@ const OrderCard = ({ order, onViewDetails, onCancelOrder }) => {
       
       <div className="flex items-center justify-between mb-4">
         <span className="font-bold text-lg text-coffee">Total: ${total.toFixed(2)}</span>
-        <span className="text-sm text-gray-500">
-          {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
+<span className="text-sm text-gray-500">
+          {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
         </span>
       </div>
       
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-600">
-          Pickup: {new Date(pickupTime).toLocaleTimeString()}
+<span className="text-sm text-gray-600">
+          Pickup: {new Date(pickup_time).toLocaleTimeString()}
         </span>
         <div className="flex gap-2">
           <Button

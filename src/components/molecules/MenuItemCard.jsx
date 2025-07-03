@@ -7,7 +7,7 @@ import Button from "@/components/atoms/Button";
 import { useCart } from "@/hooks/useCart";
 
 export default function MenuItemCard({ item, onAddToCart, onViewDetails, onToggleFavorite }) {
-const { name, price, description, image, inStock, category } = item
+const { Name, price, description, image, in_stock, category } = item
   const [imageError, setImageError] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
   const { getFavorites } = useCart()
@@ -49,7 +49,7 @@ const handleImageLoad = () => {
             {!imageError ? (
               <img
                 src={image}
-                alt={name}
+alt={Name}
                 className={`w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 ${
                   imageLoading ? 'opacity-0' : 'opacity-100'
                 }`}
@@ -60,12 +60,12 @@ const handleImageLoad = () => {
             ) : (
               <div className="w-full h-48 bg-gradient-to-br from-coffee/10 to-orange/10 flex flex-col items-center justify-center">
                 <ApperIcon name="image" size={32} className="text-coffee/40 mb-2" />
-                <span className="text-coffee/60 text-sm font-medium">{name}</span>
+<span className="text-coffee/60 text-sm font-medium">{Name}</span>
               </div>
             )}
           </div>
           
-          {!inStock && (
+{!in_stock && (
             <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
               <Badge variant="destructive">Out of Stock</Badge>
             </div>
@@ -95,7 +95,7 @@ const handleImageLoad = () => {
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-display text-lg font-semibold text-coffee truncate">
-              {name}
+{Name}
             </h3>
             <span className="font-bold text-orange text-lg ml-2">
               ${price.toFixed(2)}
@@ -110,7 +110,7 @@ const handleImageLoad = () => {
             <Button
               icon="Plus"
               onClick={() => onAddToCart(item)}
-              disabled={!inStock}
+disabled={!in_stock}
             >
               Add
 </Button>

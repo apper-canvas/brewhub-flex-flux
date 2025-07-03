@@ -32,7 +32,7 @@ const CartSummary = () => {
     try {
       setProcessing(true)
       
-      const orderPayload = {
+const orderPayload = {
         ...orderData,
         items: items,
         total: getTotalPrice(),

@@ -6,7 +6,7 @@ import ApperIcon from '@/components/ApperIcon'
 
 const OrderFormModal = ({ isOpen, onClose, onSubmit, orderTotal }) => {
   const [formData, setFormData] = useState({
-    customerName: '',
+customerName: '',
     phone: '',
     pickupTime: ''
   })
@@ -14,7 +14,7 @@ const OrderFormModal = ({ isOpen, onClose, onSubmit, orderTotal }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit(formData)
-    setFormData({ customerName: '', phone: '', pickupTime: '' })
+setFormData({ customerName: '', phone: '', pickupTime: '' })
   }
 
   const handleInputChange = (field, value) => {
