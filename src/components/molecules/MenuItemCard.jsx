@@ -91,10 +91,10 @@ export default function MenuItemCard({ item, onAddToCart, onViewDetails }) {
               disabled={!inStock}
             >
               Add
-            </Button>
+</Button>
           </div>
         </div>
-      </motion.div>
-    </Card>
+      </Card>
+    </motion.div>
   )
 }
