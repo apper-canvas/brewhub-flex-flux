@@ -4,21 +4,28 @@ import ApperIcon from "@/components/ApperIcon";
 import Badge from "@/components/atoms/Badge";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
+import { useCart } from "@/hooks/useCart";
 
-export default function MenuItemCard({ item, onAddToCart, onViewDetails }) {
-  const { name, price, description, image, inStock, category } = item
+export default function MenuItemCard({ item, onAddToCart, onViewDetails, onToggleFavorite }) {
+const { name, price, description, image, inStock, category } = item
   const [imageError, setImageError] = useState(false)
   const [imageLoading, setImageLoading] = useState(true)
+  const { getFavorites } = useCart()
+  const isFavorite = getFavorites().some(fav => fav.Id === item.Id)
 
   const handleImageError = () => {
     setImageError(true)
     setImageLoading(false)
   }
 
-  const handleImageLoad = () => {
+const handleImageLoad = () => {
     setImageLoading(false)
   }
 
+  const handleStarClick = (e) => {
+    e.stopPropagation()
+    onToggleFavorite(item)
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -63,13 +70,28 @@ export default function MenuItemCard({ item, onAddToCart, onViewDetails }) {
               <Badge variant="destructive">Out of Stock</Badge>
             </div>
           )}
-          <div className="absolute top-2 right-2">
+<div className="absolute top-2 right-2 flex items-center gap-2">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={handleStarClick}
+              className={`p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-all duration-200 ${
+                isFavorite ? 'text-orange' : 'text-gray-400 hover:text-orange'
+              }`}
+            >
+              <ApperIcon 
+                name="Star" 
+                size={16} 
+                className={`transition-all duration-200 ${
+                  isFavorite ? 'fill-orange' : 'hover:fill-orange/50'
+                }`} 
+              />
+            </motion.button>
             <Badge variant="secondary" className="capitalize">
               {category}
             </Badge>
           </div>
         </div>
-        
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-display text-lg font-semibold text-coffee truncate">

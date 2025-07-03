@@ -53,10 +53,39 @@ const cartReducer = (state, action) => {
       }
     }
     
-    case 'CLEAR_CART': {
+case 'CLEAR_CART': {
       return {
         ...state,
         items: []
+      }
+    }
+    
+    case 'ADD_FAVORITE': {
+      const exists = state.favorites.some(fav => fav.Id === action.payload.Id)
+      if (exists) return state
+      
+      return {
+        ...state,
+        favorites: [...state.favorites, action.payload]
+      }
+    }
+    
+    case 'REMOVE_FAVORITE': {
+      return {
+        ...state,
+        favorites: state.favorites.filter(fav => fav.Id !== action.payload.itemId)
+      }
+    }
+    
+    case 'REORDER_FAVORITES': {
+      const { startIndex, endIndex } = action.payload
+      const newFavorites = Array.from(state.favorites)
+      const [removed] = newFavorites.splice(startIndex, 1)
+      newFavorites.splice(endIndex, 0, removed)
+      
+      return {
+        ...state,
+        favorites: newFavorites
       }
     }
     
@@ -66,9 +95,9 @@ const cartReducer = (state, action) => {
 }
 
 const initialState = {
-  items: []
+  items: [],
+  favorites: []
 }
-
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState)
 
@@ -96,14 +125,35 @@ export const CartProvider = ({ children }) => {
     return state.items.reduce((total, item) => total + item.quantity, 0)
   }
 
+const toggleFavorite = (item) => {
+    const isFavorite = state.favorites.some(fav => fav.Id === item.Id)
+    if (isFavorite) {
+      dispatch({ type: 'REMOVE_FAVORITE', payload: { itemId: item.Id } })
+    } else {
+      dispatch({ type: 'ADD_FAVORITE', payload: item })
+    }
+  }
+
+  const reorderFavorites = (startIndex, endIndex) => {
+    dispatch({ type: 'REORDER_FAVORITES', payload: { startIndex, endIndex } })
+  }
+
+  const getFavorites = () => {
+    return state.favorites
+  }
+
   const value = {
     items: state.items,
+    favorites: state.favorites,
     addItem,
     updateQuantity,
     removeItem,
     clearCart,
     getTotalPrice,
-    getTotalItems
+    getTotalItems,
+    toggleFavorite,
+    reorderFavorites,
+    getFavorites
   }
 
   return (
