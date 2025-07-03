@@ -171,7 +171,6 @@ const handleViewDetails = (item) => {
 </div>
   )
 }
-
 // Favorites Section Component
 const FavoritesSection = ({
   favorites,
@@ -296,3 +295,4 @@ const FavoritesSection = ({
     </Card>
   )
 }
+export default MenuGrid
