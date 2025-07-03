@@ -1,53 +1,91 @@
-import { motion } from 'framer-motion'
-import Card from '@/components/atoms/Card'
-import Button from '@/components/atoms/Button'
-import Badge from '@/components/atoms/Badge'
-import ApperIcon from '@/components/ApperIcon'
+import { motion } from "framer-motion";
+import React, { useState } from "react";
+import ApperIcon from "@/components/ApperIcon";
+import Badge from "@/components/atoms/Badge";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
 
-const MenuItemCard = ({ item, onAddToCart, onViewDetails }) => {
-  const { name, description, price, category, image, inStock } = item
+export default function MenuItemCard({ item, onAddToCart, onViewDetails }) {
+  const { name, price, description, image, inStock, category } = item
+  const [imageError, setImageError] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
+
+  const handleImageError = () => {
+    setImageError(true)
+    setImageLoading(false)
+  }
+
+  const handleImageLoad = () => {
+    setImageLoading(false)
+  }
 
   return (
-    <Card
-      variant="elevated"
-      hover={inStock}
-      className="overflow-hidden h-full flex flex-col"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="group"
     >
-      <div className="relative mb-4">
-        <img 
-          src={image} 
-          alt={name}
-          className="w-full h-48 object-cover rounded-lg"
-        />
-        {!inStock && (
-          <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-            <Badge variant="danger">Out of Stock</Badge>
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div className="relative">
+          <div className="w-full h-48 bg-gray-100 relative overflow-hidden">
+            {imageLoading && (
+              <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                <div className="animate-pulse">
+                  <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
+                    <ApperIcon name="image" size={24} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {!imageError ? (
+              <img
+                src={image}
+                alt={name}
+                className={`w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 ${
+                  imageLoading ? 'opacity-0' : 'opacity-100'
+                }`}
+                onError={handleImageError}
+                onLoad={handleImageLoad}
+                loading="lazy"
+              />
+            ) : (
+              <div className="w-full h-48 bg-gradient-to-br from-coffee/10 to-orange/10 flex flex-col items-center justify-center">
+                <ApperIcon name="image" size={32} className="text-coffee/40 mb-2" />
+                <span className="text-coffee/60 text-sm font-medium">{name}</span>
+              </div>
+            )}
           </div>
-        )}
-        <div className="absolute top-2 left-2">
-          <Badge variant="secondary" size="sm">
-            {category}
-          </Badge>
+          
+          {!inStock && (
+            <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+              <Badge variant="destructive">Out of Stock</Badge>
+            </div>
+          )}
+          <div className="absolute top-2 right-2">
+            <Badge variant="secondary" className="capitalize">
+              {category}
+            </Badge>
+          </div>
         </div>
-      </div>
-      
-      <div className="flex-1 flex flex-col">
-        <h3 className="font-display text-lg text-coffee mb-2">{name}</h3>
-        <p className="text-gray-600 text-sm mb-4 flex-1">{description}</p>
         
-        <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-coffee">${price.toFixed(2)}</span>
+        <div className="p-4">
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-display text-lg font-semibold text-coffee truncate">
+              {name}
+            </h3>
+            <span className="font-bold text-orange text-lg ml-2">
+              ${price.toFixed(2)}
+            </span>
+          </div>
+          
+          <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+            {description}
+</p>
           
           <div className="flex gap-2">
             <Button
-              variant="ghost"
-              size="sm"
-              icon="Eye"
-              onClick={() => onViewDetails(item)}
-            />
-            <Button
-              variant="primary"
-              size="sm"
               icon="Plus"
               onClick={() => onAddToCart(item)}
               disabled={!inStock}
@@ -56,9 +94,7 @@ const MenuItemCard = ({ item, onAddToCart, onViewDetails }) => {
             </Button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </Card>
   )
 }
-
-export default MenuItemCard

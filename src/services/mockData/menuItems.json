@@ -109,13 +109,13 @@
     "customizations": ["extras"],
     "inStock": true
   },
-  {
+{
     "Id": 12,
     "name": "Turkey Club Sandwich",
     "category": "sandwiches",
     "price": 8.95,
     "description": "Triple-decker sandwich with sliced turkey, bacon, lettuce, tomato, and mayo on toasted bread.",
-    "image": "https://images.unsplash.com/photo-1567234669013-6331e0153b54?w=400&h=300&fit=crop",
+    "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop",
     "customizations": ["extras"],
     "inStock": true
   },
