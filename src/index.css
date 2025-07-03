@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'react-toastify/dist/ReactToastify.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #FAF6F2;
+  color: #4A4A4A;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fredoka One', cursive;
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast-container .Toastify__toast {
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.toast-container .Toastify__toast--success {
+  background: linear-gradient(135deg, #4CAF50, #45A049);
+  color: white;
+}
+
+.toast-container .Toastify__toast--error {
+  background: linear-gradient(135deg, #F44336, #D32F2F);
+  color: white;
+}
+
+.toast-container .Toastify__toast--warning {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+}
+
+.toast-container .Toastify__toast--info {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+.toast-container .Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.toast-container .Toastify__close-button {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.toast-container .Toastify__close-button:hover {
+  color: white;
+}
+
+/* Animation Classes */
+.scale-hover {
+  transition: transform 0.2s ease-out;
+}
+
+.scale-hover:hover {
+  transform: scale(1.02);
+}
+
+.bounce-animation {
+  animation: bounce 0.5s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}

@@ -1,0 +1,166 @@
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Button from '@/components/atoms/Button'
+import Badge from '@/components/atoms/Badge'
+import ApperIcon from '@/components/ApperIcon'
+
+const MenuItemModal = ({ isOpen, onClose, item, onAddToCart }) => {
+  const [quantity, setQuantity] = useState(1)
+  const [customizations, setCustomizations] = useState({})
+  const [totalPrice, setTotalPrice] = useState(0)
+
+  useEffect(() => {
+    if (item) {
+      setTotalPrice(item.price * quantity)
+      setQuantity(1)
+      setCustomizations({})
+    }
+  }, [item])
+
+  useEffect(() => {
+    if (item) {
+      let price = item.price
+      // Add customization costs here if needed
+      setTotalPrice(price * quantity)
+    }
+  }, [quantity, customizations, item])
+
+  const handleCustomizationChange = (option, value) => {
+    setCustomizations(prev => ({
+      ...prev,
+      [option]: value
+    }))
+  }
+
+  const handleAddToCart = () => {
+    onAddToCart({
+      ...item,
+      quantity,
+      customizations,
+      subtotal: totalPrice
+    })
+    onClose()
+  }
+
+  if (!item) return null
+
+  const customizationOptions = {
+    coffee: {
+      size: ['Small', 'Medium', 'Large'],
+      milk: ['Regular', 'Oat', 'Almond', 'Soy'],
+      extras: ['Extra Shot', 'Decaf', 'Extra Hot', 'Iced']
+    },
+    tea: {
+      size: ['Small', 'Medium', 'Large'],
+      extras: ['Extra Hot', 'Iced', 'Honey', 'Lemon']
+    },
+    pastries: {
+      extras: ['Heated', 'Extra Butter']
+    }
+  }
+
+  const availableOptions = customizationOptions[item.category] || {}
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-white rounded-xl p-6 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <h2 className="font-display text-2xl text-coffee">{item.name}</h2>
+                <Badge variant="secondary" size="sm">
+                  {item.category}
+                </Badge>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                icon="X"
+                onClick={onClose}
+              />
+            </div>
+            
+            <img 
+              src={item.image} 
+              alt={item.name}
+              className="w-full h-64 object-cover rounded-lg mb-4"
+            />
+            
+            <p className="text-gray-600 mb-6">{item.description}</p>
+            
+            {/* Customization Options */}
+            {Object.entries(availableOptions).map(([optionType, options]) => (
+              <div key={optionType} className="mb-6">
+                <h3 className="font-medium text-coffee mb-3 capitalize">{optionType}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {options.map((option) => (
+                    <Button
+                      key={option}
+                      variant={customizations[optionType] === option ? 'primary' : 'outline'}
+                      size="sm"
+                      onClick={() => handleCustomizationChange(optionType, option)}
+                    >
+                      {option}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            
+            {/* Quantity */}
+            <div className="flex items-center justify-between mb-6">
+              <span className="font-medium text-coffee">Quantity</span>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon="Minus"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                />
+                <span className="font-medium text-lg min-w-[2rem] text-center">{quantity}</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  icon="Plus"
+                  onClick={() => setQuantity(quantity + 1)}
+                />
+              </div>
+            </div>
+            
+            {/* Total and Add to Cart */}
+            <div className="flex items-center justify-between pt-6 border-t">
+              <span className="font-bold text-xl text-coffee">
+                Total: ${totalPrice.toFixed(2)}
+              </span>
+              <Button
+                variant="primary"
+                size="lg"
+                icon="ShoppingCart"
+                onClick={handleAddToCart}
+                disabled={!item.inStock}
+              >
+                Add to Cart
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default MenuItemModal
